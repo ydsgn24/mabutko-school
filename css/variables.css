@@ -1,0 +1,38 @@
+:root {
+  /* Colors */
+  --color-bg: #fcf7f1;
+  --color-primary: #446c8f;
+  --color-card-blue: #647d93;
+  --color-text-light: #fcf7f1;
+  --color-text-light-alt: #e3edf9;
+  --color-card-yellow: #ffebc2;
+  --color-text-yellow: #7e6755;
+  --color-card-tan: #e6d4c6;
+  --color-text-tan: #806a3e;
+
+  /* Fonts */
+  --font-h1-size: 70px;
+  --font-h1-weight: 500;
+  --font-h1-height: 0.95;
+  --font-h1-spacing: -0.7px;
+
+  --font-h2-size: 62px;
+  --font-h2-weight: 500;
+  --font-h2-height: 0.95;
+  --font-h2-spacing: -0.62px;
+
+  --font-stat-number-size: 44px;
+  --font-stat-number-weight: 500;
+  --font-stat-number-height: 0.95;
+  --font-stat-number-spacing: -0.44px;
+
+  --font-lead-size: 20px;
+  --font-lead-weight: 400;
+  --font-lead-height: 1.1;
+  --font-lead-spacing: -0.2px;
+
+  --font-body-size: 16px;
+  --font-body-weight: 500;
+  --font-body-height: 1.1;
+  --font-body-spacing: -0.16px;
+}
