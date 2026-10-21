@@ -187,23 +187,29 @@
   }
 
   // Параметры дуги карточек подобраны по макету: шаг 385px, наклон 5.34° / 7.34°, опускание 15px / 60px
+  // Карусель как в вариантах 02–05 (Awards на fromanother.love): веер вокруг точки ниже карточки,
+  // наклон 4° на шаг, опускание GAP_Y · |шаг|^1.5. Сначала в центре крайняя левая карточка,
+  // в конце крайняя правая видна целиком.
+  const lastIndex = deskCards.length - 1;
   const STEP_X = 385;
-  const DROP_Y = 15;
-  const TILT = 5.34;
-  const TILT_CURVE = 0.46;
-  const lastIndex = cards.filter((card) => !card.classList.contains('card--m-only')).length - 1;
+  const GAP_Y = 23;
+  const ROT_PER_STEP = 4;
+  const EDGE_GAP = 32;   // отступ крайней правой карточки от края экрана
+  const HALF_BOX = 230;  // полуширина наклонённой карточки с учётом сдвига от поворота (px макета)
 
   function layoutCards(progress) {
+    const step = STEP_X * cardU;
+    const endRel = Math.min(lastIndex, (window.innerWidth / 2 - EDGE_GAP - HALF_BOX * cardU) / step);
+    const shift = progress * (lastIndex - Math.max(0, endRel));
     deskCards.forEach((card, i) => {
-      const pos = i - progress * lastIndex;
-      const abs = Math.abs(pos);
-      const x = pos * STEP_X * cardU;
-      const y = DROP_Y * abs * abs * cardU;
-      const r = Math.sign(pos) * TILT * Math.pow(abs, TILT_CURVE);
-      set(card, 'transform', `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${r.toFixed(2)}deg)`);
-      set(card, 'zIndex', String(100 - Math.round(abs * 10)));
+      const rel = i - shift;
+      const x = rel * step;
+      const y = GAP_Y * Math.pow(Math.abs(rel), 1.5) * cardU;
+      set(card, 'transform', `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${(rel * ROT_PER_STEP).toFixed(2)}deg)`);
+      set(card, 'zIndex', String(100 - Math.round(Math.abs(rel) * 10)));
     });
   }
+
 
   // ---------- Цикл ----------
   let smoothY = window.scrollY;

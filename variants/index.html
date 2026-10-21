@@ -68,6 +68,30 @@
       color: var(--ink);
       white-space: nowrap;
     }
+    .alert {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+      padding: 16px 20px;
+      border: 1px solid #c9d6e1;
+      border-radius: 16px;
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--ink-dark);
+    }
+    .alert__icon {
+      flex: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 22px;
+      text-align: center;
+    }
+    .alert b { font-weight: 600; }
     .note { margin-top: 32px; font-size: 15px; line-height: 1.4; color: var(--ink); }
     @media (max-width: 600px) {
       a.item { grid-template-columns: 40px 1fr; padding: 18px; }
@@ -83,38 +107,22 @@
 
     <ol>
       <li>
-        <a class="item" href="../">
-          <span class="num">00</span>
-          <span>
-            <span class="name">Картка і фото</span>
-            <span class="desc">Світла сторінка: блакитна картка з заголовком і круглою кнопкою, поруч фото, наліпки.</span>
-          </span>
-          <span class="open">Відкрити →</span>
-        </a>
-      </li>
-      <li>
-        <a class="item" href="01-gradient-vector.html">
-          <span class="num">01</span>
-          <span>
-            <span class="name">Градієнт і вектор</span>
-            <span class="desc">Синій градієнтний фон із переливчастим вектором, три фото зверху, картки рухаються дугою.</span>
-          </span>
-          <span class="open">Відкрити →</span>
-        </a>
-      </li>
-      <li>
         <a class="item" href="02-video-fullscreen.html">
-          <span class="num">02</span>
+          <span class="num">01</span>
           <span>
             <span class="name">Відео на весь екран</span>
             <span class="desc">Відео на весь перший екран, текст і кнопка поверх нього. Картки віялом, на телефоні — стопкою.</span>
           </span>
           <span class="open">Відкрити →</span>
         </a>
+        <p class="alert">
+          <span class="alert__icon" aria-hidden="true">!</span>
+          <span><b>Зверніть увагу:</b> відео вертикальне, тому на широкому екрані його доводиться розтягувати. Через це воно втрачає чіткість, а частина кадру обрізається — головні зони (вікно, стіл, дівчина з котом) видно гірше. Тому я створила ще варіанти, де відео стоїть збоку у своїх пропорціях, — дивіться нижче.</span>
+        </p>
       </li>
       <li>
         <a class="item" href="03-video-split-panel.html">
-          <span class="num">03</span>
+          <span class="num">02</span>
           <span>
             <span class="name">Відео і синя плашка</span>
             <span class="desc">Екран навпіл: ліворуч синя плашка з текстом і живим вектором, праворуч відео.</span>
@@ -124,17 +132,17 @@
       </li>
       <li>
         <a class="item" href="04-video-split-round-button.html">
-          <span class="num">04</span>
+          <span class="num">03</span>
           <span>
             <span class="name">Плашка з круглою кнопкою</span>
-            <span class="desc">Як 03, але кнопка кругла і «жива»: при наведенні заливається й тягнеться за курсором.</span>
+            <span class="desc">Як 02, але кнопка кругла і «жива»: при наведенні заливається й тягнеться за курсором.</span>
           </span>
           <span class="open">Відкрити →</span>
         </a>
       </li>
       <li>
         <a class="item" href="05-video-right-collapse.html">
-          <span class="num">05</span>
+          <span class="num">04</span>
           <span>
             <span class="name">Текст ліворуч, відео праворуч</span>
             <span class="desc">Світлий фон, синій текст. При прокрутці відео стискається вправо й зникає, заголовок їде в центр.</span>
@@ -144,7 +152,7 @@
       </li>
       <li>
         <a class="item" href="06-gradient-live-stack.html">
-          <span class="num">06</span>
+          <span class="num">05</span>
           <span>
             <span class="name">Живий фірмовий градієнт</span>
             <span class="desc">Фон у фірмових кольорах із плаваючими плямами, м’який перехід на світлий третій блок через розмиття.</span>

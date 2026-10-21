@@ -150,6 +150,19 @@
 
 .spacer { height: 100vh; }
 
+/* ---------- Карусель на десктопе: как в вариантах 02–05 ----------
+   веер вокруг точки ниже карточки; при входе блока карточки проявляются по очереди */
+@media (min-width: 768px) {
+  .card { transform-origin: 50% 150%; opacity: 0; }
+  .intro.is-in .card { animation: card-in 1.2s cubic-bezier(.33, 1, .68, 1) calc(var(--i, 0) * .05s) forwards; }
+  .card:nth-child(1) { --i: 0; }
+  .card:nth-child(2) { --i: 1; }
+  .card:nth-child(3) { --i: 2; }
+  .card:nth-child(4) { --i: 3; }
+  .card:nth-child(5) { --i: 4; }
+}
+@keyframes card-in { to { opacity: 1; } }
+
 /* ---------- Карточки только для одного из вариантов раскладки ---------- */
 .m-br { display: none; }
 .card.card--m-only { display: none; }

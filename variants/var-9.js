@@ -33,6 +33,13 @@
 
   // ---------- Стопка карточек второго блока (мобайл) ----------
   const intro = document.querySelector('.intro');
+
+  // Карточки карусели проявляются по очереди, когда блок попадает в кадр (как в 02–05)
+  new IntersectionObserver((entries, obs) => {
+    if (!entries[0].isIntersecting) return;
+    intro.classList.add('is-in');
+    obs.disconnect();
+  }, { threshold: 0.15 }).observe(intro);
   const stack = ['.card--blue', '.card--cream', '.card--sand', '.card--ink'].map((s) => intro.querySelector(s));
   const stackPhoto = intro.querySelector('.card--m-last');
   const STEP = 256;   // 240 карточка + 16 зазор
