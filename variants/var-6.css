@@ -1,0 +1,192 @@
+/* Вариант 6: всё как в var-5.css, кроме первого блока.
+   Первый блок — плашка с текстом и анимированным вектором слева, видео справа.
+   Подключается после var-5.css и переопределяет шапку и элементы первого экрана. */
+
+:root {
+  --cream: #fcf7f1;
+  /* 1c = 1px внутри плашки 696px на макете 1440 */
+  --c: calc((100vw - 48px) / 1392);
+}
+
+body { background: var(--cream); }
+
+/* ---------- Шапка: тёмная на светлом фоне ---------- */
+
+.header.header--v6 {
+  position: relative;
+  top: 0;
+  left: 0;
+  transform: none;
+  width: 100%;
+  padding: 12px 22px;
+}
+.header--v6 .header__menu,
+.header--v6 .header__trial { color: var(--ink); }
+.header--v6 .header__trial { border-color: var(--ink); }
+.header--v6 .header__trial:hover { background: var(--ink); color: var(--white); }
+.header--v6 .header__logo img { width: 194px; height: 41.63px; }
+
+.is-ready .header.header--v6 { animation-name: header6-in; }
+@keyframes header6-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Первый блок ---------- */
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 0 22px 22px;
+  background: var(--cream);
+}
+
+.split__panel,
+.split__media {
+  position: relative;
+  height: max(calc(100svh - 88px), calc(640 * var(--c)));
+  border-radius: 24px;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.split__panel { background: var(--ink); }
+.split__media { background: #d9d9d9; }
+
+/* центр видео — в центре карточки */
+.split .hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+/* Вектор: форма из swirl.svg (747.6×425.6), центр на 171px ниже центра плашки */
+.split__swirl {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 171 * var(--c));
+  width: calc(747.6 * var(--c));
+  height: calc(425.6 * var(--c));
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+.split__swirl-float {
+  width: 100%;
+  height: 100%;
+  animation: swirl-float 14s ease-in-out infinite;
+}
+.split__swirl-canvas { display: block; width: 100%; height: 100%; }
+.split__swirl-src { position: absolute; }
+
+@keyframes swirl-float {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  33%      { transform: rotate(-2.5deg) scale(1.03) translateY(-1%); }
+  66%      { transform: rotate(2deg) scale(0.98) translateY(1%); }
+}
+
+/* Текст: та же композиция, что в var-5, уменьшенная до 0.785 и сдвинутая по макету */
+.split__title {
+  position: absolute;
+  z-index: 1;
+  top: calc(50% - 181 * var(--c));
+  left: 0;
+  right: 0;
+  height: calc(222 * var(--c));
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}
+.split__title > span { position: absolute; transform: translateX(-50%); }
+
+.split .hero__script {
+  top: 0;
+  left: calc(50% + 53.24 * var(--c));
+  width: calc(533.06 * var(--c));
+  height: calc(96.38 * var(--c));
+}
+
+.split .hero__line { font-size: calc(50.783 * var(--c)); }
+.split .hero__line--1 { top: calc(60.96 * var(--c));  left: calc(50% - 144.5 * var(--c)); }
+.split .hero__line--2 { top: calc(107.73 * var(--c)); left: calc(50% + 106.37 * var(--c)); }
+.split .hero__line--3 { top: calc(160.52 * var(--c)); left: calc(50% - 14.48 * var(--c)); }
+
+.split .split__cta {
+  z-index: 1;
+  top: calc(50% + 129 * var(--c));
+  width: calc(445 * var(--c));
+  padding: calc(20 * var(--c));
+  font-size: max(12px, calc(18 * var(--c)));
+}
+
+/* ---------- Появление ----------
+   плашка и видео проявляются → шапка → надпись прописывается → строки → кнопка → вектор */
+
+.is-ready .split__panel { animation: panel-in 1s cubic-bezier(.22, .61, .36, 1) forwards; }
+.is-ready .split__media { animation: panel-in 1s cubic-bezier(.22, .61, .36, 1) .15s forwards; }
+.is-ready .split__swirl { animation: swirl-in 1.6s ease .5s forwards; }
+
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(24px) scale(.98); filter: blur(10px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes swirl-in { to { opacity: 1; } }
+
+/* ---------- Мобильные: сверху квадратное видео, под ним плашка с текстом ---------- */
+
+@media (max-width: 767px) {
+  /* 1c = 1px мобильного макета 375 внутри плашки шириной 100vw − 32px */
+  :root { --c: calc((100vw - 32px) / 375); }
+
+  .header.header--v6 { height: 58px; padding: 0 16px; }
+  .header--v6 .header__logo img { width: 171px; height: 37px; }
+
+  .split {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 0 16px 16px;
+  }
+  /* отступ сверху до надписи и снизу от кнопки одинаковый — 56px */
+  /* отступ сверху до надписи и снизу от кнопки одинаковый — 56px */
+  .split__panel { height: calc(56px * 2 + 222 * var(--c) + 66px); }
+  .split__media { order: -1; height: auto; aspect-ratio: 1; }
+  .split .hero__bg { object-position: 50% 45%; }
+
+  .split__title { top: 56px; height: calc(182 * var(--c)); }
+  .split .hero__script {
+    left: 50%;
+    width: calc(363 * var(--c));
+    height: calc(65.6 * var(--c));
+  }
+  .split .hero__line { font-size: calc(40 * var(--c)); }
+  .split .hero__line--1 { top: calc(52 * var(--c));  left: calc(50% - 42 * var(--c)); }
+  .split .hero__line--2 { top: calc(92 * var(--c));  left: calc(50% + 77.5 * var(--c)); }
+  .split .hero__line--3 { top: calc(134 * var(--c)); left: calc(50% - 45.5 * var(--c)); }
+
+  .split .split__cta {
+    top: calc(56px + 222 * var(--c) + 30px);
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    width: calc(331 * var(--c));
+    padding: 18px;
+    font-size: 15px;
+  }
+  .split .split__cta:hover { transform: translate(-50%, -50%) scale(1.04); }
+
+  .split__swirl {
+    top: auto;
+    bottom: calc(-60 * var(--c));
+    width: calc(560 * var(--c));
+    height: calc(318.8 * var(--c));
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .split__panel, .split__media, .split__swirl { opacity: 1; animation: none !important; }
+  .split__swirl-float { animation: none; }
+  .header.header--v6 { transform: none; }
+}

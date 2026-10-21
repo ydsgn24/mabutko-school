@@ -1,0 +1,67 @@
+/* Вариант 7: всё как в варианте 6 (var-5.css + var-6.css), но вместо овальной кнопки —
+   круглая блоб-кнопка 260px (blob-button.js), а надпись поднята выше. */
+
+/* по макету надпись на 103px выше, чем в варианте 6 */
+.split__title { top: calc(50% - 284 * var(--c)); }
+
+/* Канвас больше круга: радиус = min(ширина, высота) / 2.4 (см. blob-button.js) —
+   запас нужен, чтобы край мог выгнуться наружу. Круг 260 → блок 312. */
+.blob-cta {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: calc(50% + 130 * var(--c));
+  width: calc(312 * var(--c));
+  height: calc(312 * var(--c));
+  transform: translate(-50%, -50%);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.hero__badge-blob {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hero__badge-text {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--cream);
+  font-weight: 700;
+  font-size: max(12px, calc(18 * var(--c)));
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: color .3s ease;
+}
+
+.is-ready .blob-cta { animation: cta-in .8s cubic-bezier(.22, .61, .36, 1) 1.2s forwards; }
+
+@media (max-width: 767px) {
+  /* надпись 56px от верха, под ней круг 220px, снизу тоже 56px */
+  .split__title { top: 56px; }
+  .split__panel { height: calc(56px + 222 * var(--c) + 16px + 220px + 56px); }
+  .blob-cta {
+    top: calc(56px + 222 * var(--c) + 16px + 110px);
+    width: 264px;
+    height: 264px;
+  }
+  .hero__badge-text { font-size: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blob-cta { opacity: 1; animation: none !important; }
+}

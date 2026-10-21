@@ -1,0 +1,95 @@
+/* Вариант 8: подключается после var-5.css.
+   Десктоп — слева на светлом фоне синий текст и синяя кнопка, справа видео в скруглённой карточке
+   во всю высоту экрана; шапка только над левой половиной.
+   Мобайл — без изменений, как вариант 5 (текст поверх видео). */
+
+@media (min-width: 768px) {
+  /* Первый экран прилипает на 60% высоты экрана скролла; --p (0→1) выставляет var-8.js:
+     видео обрезается слева к своему правому краю и гаснет, шапка растягивается на всю ширину. */
+  .hero-pin { height: 160svh; }
+  .hero {
+    --p: 0;
+    position: sticky;
+    top: 0;
+    background: var(--white); /* как у остальных блоков */
+  }
+
+  /* ---------- Шапка над левой половиной ---------- */
+  .header {
+    top: 0;
+    left: 0;
+    transform: none;
+    width: calc(50% + 2 * var(--u) + (50% - 2 * var(--u)) * var(--p));  /* 722 из 1440 → вся ширина */
+    padding: 12px 22px;
+    /* логотип ровно по центру шапки: боковые колонки одинаковой ширины */
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+  }
+  .header__trial { justify-self: end; }
+  .header__menu,
+  .header__trial { color: var(--ink); }
+  .header__menu { width: auto; }
+  .header__trial { border-color: var(--ink); }
+  .header__trial:hover { background: var(--ink); color: var(--white); }
+  .header__logo img { width: 194px; height: 41.63px; }
+  .is-ready .header { animation-name: header8-in; }
+
+  /* ---------- Видео справа ---------- */
+  .hero__media {
+    left: auto;
+    right: 22px;
+    top: 13px;
+    bottom: 13px;
+    width: calc(50% - 24px);
+    border-radius: 24px;
+    overflow: hidden;
+    /* сжимается только видимая область — само видео не масштабируется и не искажается */
+    clip-path: inset(0 0 0 calc(var(--p) * 100%) round 24px);
+  }
+  .hero__media::after,
+  .hero__shade { display: none; }
+  .hero__bg { object-position: 50% 50%; opacity: calc(1 - var(--p) * var(--p)); }
+
+  /* ---------- Текст слева (позиции от центра экрана, как в макете) ---------- */
+  /* при уходе видео заголовок и кнопка едут из центра левой половины в центр экрана:
+     сдвигаем left/right, а не transform — transform и translate уже заняты анимациями появления */
+  .hero__title {
+    top: calc(50% - 165 * var(--u));
+    left: calc(359 * var(--u) * var(--p));
+    right: calc(-359 * var(--u) * var(--p));
+    height: calc(222 * var(--u));
+  }
+
+  .hero__script {
+    left: calc(50% - 285.76 * var(--u));
+    width: calc(533.06 * var(--u));
+    height: calc(96.38 * var(--u));
+  }
+  .write__fill { fill: var(--ink); }
+  .write__stroke path { stroke: var(--ink); }
+
+  .hero__line {
+    font-size: calc(50.783 * var(--u));
+    background-image: linear-gradient(90deg, var(--ink) 45%, rgba(113, 138, 160, .25) 55%);
+  }
+  .hero__line--1 { top: calc(60.96 * var(--u));  left: calc(50% - 483.5 * var(--u)); }
+  .hero__line--2 { top: calc(107.73 * var(--u)); left: calc(50% - 232.63 * var(--u)); }
+  .hero__line--3 { top: calc(160.52 * var(--u)); left: calc(50% - 353.48 * var(--u)); }
+
+  .cta {
+    top: calc(50% + 149 * var(--u));
+    left: calc(50% - 353.5 * var(--u) * (1 - var(--p)));
+    background: var(--ink);
+    color: #fff;
+  }
+  .cta:hover { box-shadow: 0 10px 40px rgba(46, 66, 86, .25); }
+}
+
+@keyframes header8-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (min-width: 768px) and (prefers-reduced-motion: reduce) {
+  .header { transform: none; }
+}

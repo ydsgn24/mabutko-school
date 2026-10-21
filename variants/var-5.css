@@ -1,0 +1,545 @@
+:root {
+  --white: #fffdfa;
+  --cream: #fcf7f1;
+  --ink: #718aa0;
+  --ink-pale: #dde4ea;
+
+  /* 1u = 1px на макете 1440, пропорционально уже на меньших экранах */
+  --u: min(1px, 0.06944vw);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-font-smoothing: antialiased; }
+
+body {
+  background: var(--white);
+  color: var(--white);
+  font-family: "Montserrat", sans-serif;
+  overflow-x: hidden;
+}
+
+img { display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Шапка ---------- */
+
+.header {
+  position: absolute;
+  z-index: 3;
+  top: calc(21 * var(--u));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(1357 * var(--u)), calc(100% - 32px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header__menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 190px;
+  font-family: "Inter Tight", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.header__logo img { width: 247px; height: 53px; }
+
+.header__trial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border: 1px solid var(--white);
+  border-radius: 999px;
+  font-family: "Inter Tight", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--cream);
+  transition: background-color .25s, color .25s;
+}
+.header__trial:hover { background: var(--white); color: var(--ink); }
+
+/* ---------- Первый экран ----------
+   Всё стартует, когда загрузился постер видео (класс .is-ready на <html> ставит var-5.js):
+   видео проявляется из размытия → шапка → надпись прописывается → строки заполняются → кнопка. */
+
+.hero {
+  position: relative;
+  height: 100svh;
+  min-height: calc(760 * var(--u));
+  overflow: hidden;
+}
+
+.hero__media { position: absolute; inset: 0; }
+
+/* дополнительное затемнение под текстом (поверх затемнения из макета) */
+.hero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(calc(620 * var(--u)) calc(360 * var(--u)) at 50% calc(50% + 110 * var(--u)),
+    rgba(20, 24, 30, .42), rgba(20, 24, 30, .22) 55%, rgba(20, 24, 30, 0) 100%);
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 70%; /* кадр как в макете: окно сверху, стол внизу */
+}
+
+.hero__shade { position: absolute; max-width: none; pointer-events: none; }
+.hero__shade--m-top, .hero__shade--m-bottom { display: none; }
+/* svg уже включают поля под размытие — отступы пересчитаны из макета */
+.hero__shade--top {
+  left: calc((-344 - 400) * var(--u));
+  top: calc((-270 - 400) * var(--u));
+  width: calc(1353 * var(--u));
+  height: calc(1190 * var(--u));
+}
+.hero__shade--center {
+  left: calc(50% - 975 * var(--u) + 19 * var(--u));
+  top: calc(50% - 70 * var(--u) - 17 * var(--u) - 400 * var(--u));
+  width: calc(1950 * var(--u));
+  height: calc(1339 * var(--u));
+}
+
+.hero__title {
+  position: absolute;
+  top: calc(50% - 70 * var(--u));
+  left: 0;
+  right: 0;
+  height: calc(283 * var(--u));
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.hero__title > span { position: absolute; transform: translateX(-50%); }
+
+.hero__script {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: calc(50% + 86 * var(--u));
+  transform: translateX(-50%);
+  width: calc(679.22 * var(--u));
+  height: calc(122.81 * var(--u));
+  overflow: visible;
+}
+
+.hero__line {
+  font-size: calc(64.706 * var(--u));
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  /* строка «заполняется» белым слева направо */
+  color: transparent;
+  background: linear-gradient(90deg, var(--white) 45%, rgba(255, 253, 250, .25) 55%) 100% 0 / 220% 100% no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  opacity: 0;
+}
+.hero__line--1 { top: calc(77.67 * var(--u));  left: calc(50% - 165.5 * var(--u)); --start: .6s; }
+.hero__line--2 { top: calc(137.26 * var(--u)); left: calc(50% + 154.09 * var(--u)); --start: .75s; }
+.hero__line--3 { top: calc(204.52 * var(--u)); left: 50%; --start: .9s; }
+
+.cta {
+  position: absolute;
+  top: calc(50% + 292 * var(--u));
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(445 * var(--u));
+  padding: calc(20 * var(--u));
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: max(12px, calc(18 * var(--u)));
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.cta:hover {
+  transform: translate(-50%, -50%) scale(1.04);
+  box-shadow: 0 10px 40px rgba(46, 66, 86, .25);
+}
+
+/* Надпись «прописывается»: обводка букв бежит слева направо, заливка идёт следом за «пером» */
+.hero__script { --start: .2s; }
+.write__fill { fill: var(--white); }
+.write__wipe { transform: translateX(0); }
+.write__stroke path {
+  fill: none;
+  stroke: var(--white);
+  stroke-width: 1.4;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+}
+
+/* Стартовые состояния до загрузки */
+.hero__media { opacity: 0; transform: scale(1.08); filter: blur(14px); }
+.header { opacity: 0; }
+
+.is-ready .hero__media {
+  animation: hero-in 1.2s cubic-bezier(.22, .61, .36, 1) forwards;
+}
+.is-ready .header {
+  animation: header-in .8s cubic-bezier(.22, .61, .36, 1) .2s forwards;
+}
+.is-ready .write__wipe {
+  animation: write-wipe 1.5s cubic-bezier(.45, .05, .35, 1) var(--start) both;
+}
+.is-ready .write__stroke path {
+  animation:
+    write-draw .6s cubic-bezier(.5, 0, .3, 1) calc(var(--d) * .55 + .2s) forwards,
+    write-fade .5s ease 1.9s forwards;
+}
+.is-ready .hero__line {
+  animation:
+    rise .7s cubic-bezier(.22, .61, .36, 1) var(--start) forwards,
+    line-fill .9s cubic-bezier(.45, .05, .35, 1) calc(var(--start) + .1s) forwards;
+}
+.is-ready .cta { animation: cta-in .8s cubic-bezier(.22, .61, .36, 1) 1.2s forwards; }
+
+@keyframes hero-in {
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+@keyframes header-in {
+  from { opacity: 0; transform: translate(-50%, -12px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes rise {
+  from { opacity: 0; translate: 0 .35em; filter: blur(6px); }
+  to   { opacity: 1; translate: 0 0; filter: blur(0); }
+}
+@keyframes line-fill { to { background-position: 0 0; } }
+@keyframes cta-in {
+  from { opacity: 0; translate: 0 16px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+@keyframes write-wipe { from { transform: translateX(0); } to { transform: translateX(879px); } }
+@keyframes write-draw { to { stroke-dashoffset: 0; } }
+@keyframes write-fade { to { opacity: 0; } }
+
+/* ---------- Заголовки, которые заполняются при скролле ----------
+   --fill (px от верха заголовка) выставляет var-5.js: выше линии на экране текст
+   уже «залит» цветом, ниже — бледный. */
+
+.js-fill {
+  --fill: 0px;
+  color: transparent;
+  background-image: linear-gradient(180deg,
+    var(--fill-ink) var(--fill),
+    var(--fill-pale) calc(var(--fill) + 8px));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* ---------- Второй блок: карусель ---------- */
+
+.intro {
+  position: relative;
+  height: 320vh; /* сколько скроллить, пока карточки проезжают */
+  background: var(--white);
+}
+
+.intro__sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: clip;
+}
+
+.intro__title {
+  --fill-ink: var(--ink);
+  --fill-pale: var(--ink-pale);
+  position: absolute;
+  top: max(calc(50% - 290 * var(--u)), 88px);
+  left: 0;
+  right: 0;
+  font-size: min(calc(48 * var(--u)), calc((100vw - 32px) / 16.5));
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+}
+.m-br { display: none; }
+
+.cards {
+  position: absolute;
+  top: calc(50% + 107 * var(--u));
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+/* Как блок Awards на fromanother.love: карточки — веер вокруг точки ниже себя
+   (transform-origin 50% 150%), наклон растёт линейно с шагом, опускание — как |шаг|^1.5.
+   transform выставляет var-5.js от прогресса скролла; при входе блока — проявление по очереди. */
+.card {
+  transform-origin: 50% 150%;
+  opacity: 0;
+  position: absolute;
+  left: calc(-180 * var(--u));
+  top: calc(-135 * var(--u));
+  width: calc(360 * var(--u));
+  height: calc(270 * var(--u));
+  border-radius: 12px;
+  overflow: hidden;
+  will-change: transform;
+}
+.intro.is-in .card {
+  animation: card-in 1.2s cubic-bezier(.33, 1, .68, 1) calc(var(--i, 0) * .05s) forwards;
+}
+.card:nth-child(1) { --i: 0; }
+.card:nth-child(2) { --i: 1; }
+.card:nth-child(3) { --i: 2; }
+.card:nth-child(4) { --i: 3; }
+.card:nth-child(5) { --i: 4; }
+@keyframes card-in { to { opacity: 1; } }
+.card.card--m-only { display: none; }
+
+.card--photo { background: #f9f7f4; }
+.card--photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card--stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: calc(24 * var(--u));
+}
+.card--blue  { background: #e3edf9; color: #446c8f; }
+.card--cream { background: #fcf7f1; color: #7e6755; }
+.card--sand  { background: #e6d4c6; color: #806a3e; }
+.card--ink   { background: #718aa0; color: #fcf7f1; }
+
+.card__num {
+  font-size: calc(48 * var(--u));
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+}
+.card__text {
+  font-size: max(11px, calc(20 * var(--u)));
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-align: right;
+  white-space: pre-wrap;
+}
+
+/* ---------- Третий блок: текст заполняется, фото наплывают поверх ----------
+   Как на референсе: текст лежит поверх фото в режиме difference — над фото
+   буквы видны инверсией картинки. Цвета подобраны так, чтобы на фоне #fffdfa
+   difference давал ровно --ink (#718aa0) и --ink-pale. */
+
+.calm {
+  position: relative;
+  height: calc(906 * var(--u));
+  min-height: 100vh;
+  background: var(--white);
+  isolation: isolate;
+  overflow: clip;
+}
+
+.calm__title {
+  --fill-ink: #8e735a;   /* #fffdfa − #8e735a = #718aa0 */
+  --fill-pale: #221910;  /* #fffdfa − #221910 = #dde4ea */
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(960 * var(--u));
+  font-size: min(calc(64 * var(--u)), calc((100vw - 32px) / 9));
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  text-align: center;
+  mix-blend-mode: difference;
+}
+
+.calm__photo {
+  position: absolute;
+  z-index: 1;
+  width: calc(249 * var(--u));
+  height: calc(186 * var(--u));
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f9f7f4;
+  will-change: transform;
+}
+.calm__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* позиции от центра блока (в макете блок 1440×906, центр 720×453) */
+.calm__photo--1 { left: calc(50% - 392 * var(--u)); top: calc(50% - 291 * var(--u)); }
+.calm__photo--2 { left: calc(50% + 231 * var(--u)); top: calc(50% - 70 * var(--u)); }
+.calm__photo--3 { left: calc(50% - 392 * var(--u)); top: calc(50% + 116 * var(--u)); }
+.calm__photo--2 img {
+  inset: auto;
+  left: 0;
+  top: -69.28%;
+  height: 178.49%;
+  object-fit: fill;
+}
+
+/* Пустой блок в конце: третий блок можно досмотреть до конца */
+.spacer { height: 100vh; background: var(--white); }
+
+/* ---------- Мобильные (макет «вар 6 моб», 375px) ---------- */
+
+@media (max-width: 767px) {
+  :root { --u: calc(100vw / 760); }
+
+  .header {
+    top: 0;
+    width: 100%;
+    height: 58px;
+    padding: 0 16px;
+  }
+  .header__logo { order: -1; }
+  .header__logo img { width: 171px; height: 37px; }
+  .header__menu {
+    width: auto;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+  .header__menu img { width: 8px; height: 8px; }
+  .header__trial { display: none; }
+
+  /* Первый экран: в макете 375×816, контент привязан к низу экрана */
+  .hero { height: 100svh; min-height: 640px; }
+  .hero__bg { object-position: 50% 50%; }
+  .hero__shade--top, .hero__shade--center { display: none; }
+  .hero__shade--m-top, .hero__shade--m-bottom { display: block; }
+  .hero__media::after {
+    background: radial-gradient(340px 260px at 50% calc(100% - 190px),
+      rgba(20, 24, 30, .45), rgba(20, 24, 30, .22) 55%, rgba(20, 24, 30, 0) 100%);
+  }
+  .hero__shade--m-top { left: calc(50% - 768.5px); top: -435px; width: 1507px; height: 1215px; }
+  .hero__shade--m-bottom { left: calc(50% - 753.5px); bottom: -334px; width: 1507px; height: 1150px; }
+
+  .hero__title { top: auto; bottom: 0; height: 332px; }
+  .hero__script {
+    left: 50%;
+    width: min(363px, calc(100vw - 12px));
+    height: auto;
+    aspect-ratio: 679.22 / 122.81;
+  }
+  .hero__line { font-size: min(40px, calc((100vw - 32px) / 7.2)); letter-spacing: -0.03em; }
+  .hero__line--1 { top: 52px;  left: calc(50% - 42px); }
+  .hero__line--2 { top: 92px;  left: calc(50% + 77.5px); }
+  .hero__line--3 { top: 134px; left: calc(50% - 45.5px); }
+
+  .cta {
+    top: auto;
+    bottom: 47px;
+    transform: translateX(-50%);
+    width: min(331px, calc(100vw - 44px));
+    padding: 20px;
+    font-size: 16px;
+  }
+  .cta:hover { transform: translateX(-50%) scale(1.04); }
+
+  /* Второй блок: сначала карточки идут столбиком через 16px, при скролле прилипают
+     друг на друга, оставляя 16px от предыдущей, а потом стопку перекрывает фото */
+  .intro { height: auto; padding: 104px 15px 120px; }
+  .intro__sticky { position: static; height: auto; overflow: visible; }
+  .intro__title {
+    position: static;
+    max-width: 345px;
+    margin: 0 auto 73px;
+    font-size: 28px;
+    white-space: normal;
+  }
+  .m-br { display: inline; }
+
+  .cards {
+    position: static;
+    width: auto;
+    height: auto;
+    max-width: 345px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .card {
+    position: sticky;
+    top: calc(80px + var(--i) * 16px);
+    left: auto;
+    width: 100%;
+    height: 240px;
+    margin-bottom: 16px;
+    opacity: 1;
+    transform: none;
+    animation: none !important;
+  }
+  .card.card--d-only { display: none; }
+  .card.card--m-only { display: flex; }
+  .card--blue  { order: 1; --i: 0; }
+  .card--cream { order: 2; --i: 1; }
+  .card--sand  { order: 3; --i: 2; }
+  .card--ink   { order: 4; --i: 3; }
+  /* фото не липнет — проезжает поверх стопки и закрывает её */
+  .card--m-last { order: 5; position: relative; top: auto; z-index: 10; margin-bottom: 0; }
+
+  .card--stat { padding: 24px; }
+  .card__num { font-size: 40px; letter-spacing: -0.01em; }
+  .card__text { font-size: 20px; }
+
+  .calm { height: auto; min-height: 0; padding: 220px 16px; }
+  .calm__title { position: relative; top: auto; left: auto; transform: none; width: auto; font-size: calc((100vw - 32px) / 8.6); }
+  .calm__photo { width: 150px; height: 112px; }
+  .calm__photo--1 { left: 16px; top: 120px; }
+  .calm__photo--2 { left: auto; right: 16px; top: calc(50% + 95px); }
+  .calm__photo--3 { left: 28px; top: auto; bottom: 80px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__media, .header, .hero__line, .cta { opacity: 1; filter: none; transform: none; animation: none !important; }
+  .header { transform: translateX(-50%); }
+  .cta { transform: translate(-50%, -50%); }
+  .hero__line { background-position: 0 0; }
+  .write__wipe { animation: none !important; transform: translateX(2000px); }
+  .write__stroke { display: none; }
+}

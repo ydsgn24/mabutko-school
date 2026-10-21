@@ -1,0 +1,279 @@
+/* Вариант 9: 01-gradient-vector.html (styles.css + script.js) + «живой» градиент + третий блок с переходом
+   как на fromanother.love перед Future work. Подключается после styles.css. */
+
+/* Фирменные цвета: основа фона — #728B9F, светлый #E2EEF7 только как деталь (пятна, блики).
+   При скролле фон светлеет до #94A9B9 — это #728B9F, смешанный на 30% с #E2EEF7. */
+:root {
+  --brand: #728b9f;
+  --brand-light: #e2eef7;
+  --bg-from: #728b9f;
+  --bg-to: #94a9b9;
+}
+
+/* ---------- Живой градиент ----------
+   Мягкие цветные пятна (радиальные градиенты — дёшево, без filter: blur) медленно плывут каждое
+   по своей траектории; весь слой чуть тянется за курсором (var-9.js). */
+
+.bg__glows {
+  position: absolute;
+  inset: -15%;
+  will-change: transform;
+}
+
+.bg__glow {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+.bg__glow--a {
+  left: 0; top: 8%;
+  width: 62vw; height: 52vw;
+  background: radial-gradient(closest-side, rgba(226, 238, 247, .42), rgba(226, 238, 247, 0));
+  animation: glow-a 22s ease-in-out infinite alternate;
+}
+.bg__glow--b {
+  left: 48%; top: 46%;
+  width: 46vw; height: 40vw;
+  background: radial-gradient(closest-side, rgba(226, 238, 247, .3), rgba(226, 238, 247, 0));
+  animation: glow-b 28s ease-in-out infinite alternate;
+}
+.bg__glow--c {
+  left: 52%; top: -6%;
+  width: 70vw; height: 58vw;
+  background: radial-gradient(closest-side, rgba(84, 104, 122, .5), rgba(84, 104, 122, 0));
+  animation: glow-c 26s ease-in-out infinite alternate;
+}
+.bg__glow--d {
+  left: 6%; top: 62%;
+  width: 40vw; height: 34vw;
+  background: radial-gradient(closest-side, rgba(226, 238, 247, .18), rgba(226, 238, 247, 0));
+  animation: glow-d 32s ease-in-out infinite alternate;
+}
+
+@keyframes glow-a {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(18vw, 10vh) scale(1.15); }
+  100% { transform: translate(6vw, 28vh) scale(.92); }
+}
+@keyframes glow-b {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-20vw, -14vh) scale(1.2); }
+  100% { transform: translate(-6vw, 10vh) scale(.9); }
+}
+@keyframes glow-c {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-16vw, 22vh) scale(.9); }
+  100% { transform: translate(-30vw, 6vh) scale(1.1); }
+}
+@keyframes glow-d {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(26vw, -18vh) scale(1.25); }
+  100% { transform: translate(40vw, -4vh) scale(1); }
+}
+
+/* Зерно как у fromanother.love: неподвижное и еле заметное, текстуру рисует var-9.js */
+.bg__noise {
+  position: absolute;
+  inset: 0;
+  background-image: var(--noise, none);
+  background-size: 100px 100px;
+  mix-blend-mode: soft-light;
+  opacity: .5;
+  pointer-events: none;
+}
+
+/* Светлый фон третьего блока: прозрачность выставляет var-9.js */
+.bg__cream {
+  position: absolute;
+  inset: 0;
+  background: #fffdfa;
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* ---------- Третий блок ---------- */
+
+.calm {
+  position: relative;
+  height: calc(906 * var(--u));
+  min-height: 100vh;
+}
+
+.calm__title {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(960 * var(--u));
+  color: #718aa0;
+  font-size: min(calc(64 * var(--u)), calc((100vw - 32px) / 9));
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  text-align: center;
+}
+.calm__title span { display: block; }
+
+/* размытие и прозрачность строк и фото выставляет var-9.js по их положению на экране */
+.js-blur { will-change: filter, opacity; }
+
+.calm__photo {
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+  width: calc(249 * var(--u));
+  height: calc(186 * var(--u));
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f9f7f4;
+}
+.calm__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* позиции от центра блока (в макете блок 1440×906, центр 720×453) */
+.calm__photo--1 { left: calc(50% - 392 * var(--u)); top: calc(50% - 291 * var(--u)); }
+.calm__photo--2 { left: calc(50% + 231 * var(--u)); top: calc(50% - 70 * var(--u)); }
+.calm__photo--3 { left: calc(50% - 392 * var(--u)); top: calc(50% + 116 * var(--u)); }
+.calm__photo--2 img {
+  inset: auto;
+  left: 0;
+  top: -69.28%;
+  height: 178.49%;
+  object-fit: fill;
+}
+
+.spacer { height: 100vh; }
+
+/* ---------- Карточки только для одного из вариантов раскладки ---------- */
+.m-br { display: none; }
+.card.card--m-only { display: none; }
+.photo.photo--clone { display: none; }
+@keyframes photos-loop { to { transform: translateX(-50%); } }
+.card--ink { background: var(--brand); color: #fcf7f1; }
+
+/* ---------- Мобайл по макету «2 блока м» (375px): 1m = 1px макета ---------- */
+@media (max-width: 767px) {
+  :root { --m: calc(100vw / 375); }
+
+  .header {
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    height: 58px;
+    padding: 0 16px;
+  }
+  .header__logo { order: -1; }
+  .header__logo img { width: 171px; height: 37px; }
+  .header__menu { font-size: 14px; text-transform: uppercase; }
+  .header__menu img { width: 8px; height: 8px; }
+  .header__trial { display: none; }
+
+  /* вектор — 459px макета по ширине; позицию по вертикали ставит script-9.js */
+  .swirl {
+    width: 127.86vw;
+    height: 70.99vw;
+    margin-left: -63.93vw;
+    margin-top: -35.5vw;
+  }
+
+  /* overflow: clip — лента фото шире экрана и не должна растягивать страницу */
+  .hero { height: calc(790 * var(--m)); overflow: clip; }
+  /* три фото бегут бесконечной лентой: var-9.js дублирует их, лента сдвигается ровно на один набор.
+     Старт — как в макете: средняя фотография по центру. */
+  .hero__photos {
+    top: calc(111 * var(--m));
+    left: calc(50% - (201.94 * 1.5 + 7.086) * var(--m));
+    width: max-content;
+    gap: 0;
+    transform: none;
+    animation: photos-loop 24s linear infinite;
+  }
+  .photo.photo--clone { display: block; }
+  .photo {
+    flex: none;
+    margin-right: calc(7.086 * var(--m));
+    width: calc(201.94 * var(--m));
+    height: calc(164.74 * var(--m));
+    aspect-ratio: auto;
+    border-radius: calc(7.9 * var(--m));
+  }
+
+  .hero__title { top: calc(315 * var(--m)); height: calc(182 * var(--m)); }
+  .hero__script { left: 50%; width: calc(363 * var(--m)); height: calc(65.6 * var(--m)); }
+  .hero__line { font-size: calc(40 * var(--m)); }
+  .hero__line--1 { top: calc(52 * var(--m));  left: calc(50% - 42 * var(--m)); }
+  .hero__line--2 { top: calc(92 * var(--m));  left: calc(50% + 77.5 * var(--m)); }
+  .hero__line--3 { top: calc(134 * var(--m)); left: calc(50% - 45.5 * var(--m)); }
+  .cta {
+    top: calc(674 * var(--m));
+    width: calc(331 * var(--m));
+    padding: calc(20 * var(--m));
+    font-size: calc(16 * var(--m));
+  }
+
+  /* Второй блок закреплён вместе с заголовком. Карточки сначала идут столбиком через 16px,
+     при скролле стыкуются стопкой (от каждой остаётся 16px), потом фото наезжает и закрывает всю стопку.
+     Положение карточек выставляет var-9.js; высота блока = экран + путь стопки (4 × 256px) + пауза. */
+  .intro { height: calc(100svh + 1024px + 200px); padding: 0; }
+  .intro__sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    padding: max(56px, calc(69 * var(--m))) 16px 0;
+    overflow: clip;
+  }
+  .intro__title {
+    max-width: calc(365 * var(--m));
+    margin: 0 auto 32px;
+    font-size: 28px;
+    white-space: normal;
+  }
+  .m-br { display: inline; }
+
+  .cards {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: auto;
+    height: 288px; /* 240 + 3 × 16 — высота собранной стопки */
+  }
+  .card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 240px;
+  }
+  .card.card--d-only { display: none; }
+  .card.card--m-only { display: flex; }
+  /* фото закрывает стопку целиком */
+  .card--m-last { height: 288px; }
+  .card--stat { padding: 24px; }
+  .card__num { font-size: 40px; }
+  .card__text { font-size: 20px; }
+
+  .calm { height: auto; min-height: 0; padding: 220px 16px; }
+  .calm__title {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: auto;
+    font-size: calc((100vw - 32px) / 8.6);
+  }
+  .calm__photo { width: 150px; height: 112px; }
+  .calm__photo--1 { left: 16px; top: 120px; }
+  .calm__photo--2 { left: auto; right: 16px; top: calc(50% + 95px); }
+  .calm__photo--3 { left: 28px; top: auto; bottom: 80px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg__glow { animation: none; }
+}

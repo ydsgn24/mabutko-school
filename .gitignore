@@ -1,1 +1,10 @@
 .DS_Store
+.claude
+
+# исходники видео (на сайте используются пережатые копии в variants/assets/v5)
+IMG_*.MP4
+
+# в папке variants — только варианты для клиента
+variants/longevica/
+variants/longevica-favicon-512.png
+variants/LOVABLE-GUIDE.md
